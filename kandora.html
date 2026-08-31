@@ -480,7 +480,7 @@ function attachEvents() {
         }, 500);
       });
       poster.addEventListener("pointermove", function (e) {
-        if (pressTimer && (Math.abs(e.clientX - startX) > 10 || Math.abs(e.clientY - startY) > 10)) {
+        if (pressTimer && (Math.abs(e.clientX - startX) > 26 || Math.abs(e.clientY - startY) > 26)) {
           clearTimeout(pressTimer);
           pressTimer = null;
         }
