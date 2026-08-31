@@ -316,7 +316,7 @@ function renderList() {
     var posterInner = d.photo ? '<img src="' + d.photo + '" alt="" />' : '🎞️';
     html += (
       '<div class="drama-card" data-action="edit-drama" data-id="' + d.id + '">' +
-        '<div class="drama-poster">' + posterInner + '</div>' +
+        '<div class="drama-poster"' + (d.photo ? ' data-action="view-drama-photo"' : '') + '>' + posterInner + '</div>' +
         '<div class="drama-title">' + escapeHtml(d.title) + '</div>' +
       '</div>'
     );
@@ -440,6 +440,18 @@ function attachEvents() {
     app.querySelectorAll('[data-action="edit-drama"]').forEach(function (card) {
       card.addEventListener("click", function () {
         openFormForEdit(card.getAttribute("data-id"));
+      });
+    });
+    app.querySelectorAll('[data-action="view-drama-photo"]').forEach(function (poster) {
+      poster.addEventListener("click", function (e) {
+        e.stopPropagation();
+        var card = poster.closest(".drama-card");
+        var id = card ? card.getAttribute("data-id") : null;
+        var d = state.dramas.find(function (x) { return x.id === id; });
+        if (d && d.photo) {
+          state.viewingPhoto = d.photo;
+          render();
+        }
       });
     });
   }
