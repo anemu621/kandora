@@ -444,60 +444,15 @@ function attachEvents() {
       });
     });
     app.querySelectorAll('[data-action="view-drama-photo"]').forEach(function (poster) {
-      poster.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-
-      function getDrama() {
+      poster.addEventListener("click", function (e) {
+        e.stopPropagation();
         var card = poster.closest(".drama-card");
         var id = card ? card.getAttribute("data-id") : null;
-        return state.dramas.find(function (x) { return x.id === id; });
-      }
-      function openSearch() {
-        var d = getDrama();
-        if (d && d.title) {
-          var query = encodeURIComponent(d.title + " 韓国ドラマ");
-          window.open("https://www.google.com/search?q=" + query, "_blank");
-        }
-      }
-      function openEnlarge() {
-        var d = getDrama();
+        var d = state.dramas.find(function (x) { return x.id === id; });
         if (d && d.photo) {
           state.viewingPhoto = d.photo;
           render();
         }
-      }
-
-      var touchStartTime = 0, touchStartX = 0, touchStartY = 0, moved = false, usedTouch = false;
-
-      poster.addEventListener("touchstart", function (e) {
-        usedTouch = true;
-        moved = false;
-        touchStartTime = Date.now();
-        var t = e.touches[0];
-        touchStartX = t.clientX;
-        touchStartY = t.clientY;
-      }, { passive: true });
-
-      poster.addEventListener("touchmove", function (e) {
-        var t = e.touches[0];
-        if (Math.abs(t.clientX - touchStartX) > 26 || Math.abs(t.clientY - touchStartY) > 26) moved = true;
-      }, { passive: true });
-
-      poster.addEventListener("touchend", function (e) {
-        e.preventDefault();
-        var duration = Date.now() - touchStartTime;
-        if (moved) return;
-        if (duration >= 480) {
-          if (navigator.vibrate) navigator.vibrate(8);
-          openSearch();
-        } else {
-          openEnlarge();
-        }
-      });
-
-      poster.addEventListener("click", function (e) {
-        e.stopPropagation();
-        if (usedTouch) return;
-        openEnlarge();
       });
     });
   }
