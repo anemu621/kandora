@@ -445,9 +445,6 @@ function attachEvents() {
     });
     app.querySelectorAll('[data-action="view-drama-photo"]').forEach(function (poster) {
       poster.addEventListener("contextmenu", function (e) { e.preventDefault(); });
-      var pressTimer = null;
-      var longPressed = false;
-      var startX = 0, startY = 0;
 
       function getDrama() {
         var card = poster.closest(".drama-card");
@@ -469,30 +466,37 @@ function attachEvents() {
         }
       }
 
-      poster.addEventListener("pointerdown", function (e) {
-        longPressed = false;
-        startX = e.clientX;
-        startY = e.clientY;
-        pressTimer = setTimeout(function () {
-          longPressed = true;
+      var touchStartTime = 0, touchStartX = 0, touchStartY = 0, moved = false, usedTouch = false;
+
+      poster.addEventListener("touchstart", function (e) {
+        usedTouch = true;
+        moved = false;
+        touchStartTime = Date.now();
+        var t = e.touches[0];
+        touchStartX = t.clientX;
+        touchStartY = t.clientY;
+      }, { passive: true });
+
+      poster.addEventListener("touchmove", function (e) {
+        var t = e.touches[0];
+        if (Math.abs(t.clientX - touchStartX) > 26 || Math.abs(t.clientY - touchStartY) > 26) moved = true;
+      }, { passive: true });
+
+      poster.addEventListener("touchend", function (e) {
+        e.preventDefault();
+        var duration = Date.now() - touchStartTime;
+        if (moved) return;
+        if (duration >= 480) {
           if (navigator.vibrate) navigator.vibrate(8);
           openSearch();
-        }, 500);
-      });
-      poster.addEventListener("pointermove", function (e) {
-        if (pressTimer && (Math.abs(e.clientX - startX) > 26 || Math.abs(e.clientY - startY) > 26)) {
-          clearTimeout(pressTimer);
-          pressTimer = null;
+        } else {
+          openEnlarge();
         }
       });
-      ["pointerup", "pointercancel", "pointerleave"].forEach(function (evName) {
-        poster.addEventListener(evName, function () {
-          if (pressTimer) { clearTimeout(pressTimer); pressTimer = null; }
-        });
-      });
+
       poster.addEventListener("click", function (e) {
         e.stopPropagation();
-        if (longPressed) { longPressed = false; return; }
+        if (usedTouch) return;
         openEnlarge();
       });
     });
