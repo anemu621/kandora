@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, interactive-widget=resizes-content" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<meta name="apple-mobile-web-app-title" content="韓ドラコレクション" />
+<meta name="theme-color" content="#8B5FA8" />
+<title>韓ドラコレクション</title>
+<link rel="apple-touch-icon" href="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%23F3ECFA%22/%3E%0A%3Crect%20x%3D%2220%22%20y%3D%2238%22%20width%3D%2260%22%20height%3D%2238%22%20rx%3D%224%22%20fill%3D%22%238B5FA8%22/%3E%0A%3Crect%20x%3D%2220%22%20y%3D%2226%22%20width%3D%2260%22%20height%3D%2212%22%20rx%3D%223%22%20fill%3D%22%236B4485%22%20transform%3D%22rotate%28-4%2050%2032%29%22/%3E%0A%3Crect%20x%3D%2226%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2030%2032%29%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2044%2032%29%22/%3E%0A%3Crect%20x%3D%2254%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2058%2032%29%22/%3E%0A%3Crect%20x%3D%2268%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2072%2032%29%22/%3E%0A%3Ccircle%20cx%3D%2250%22%20cy%3D%2258%22%20r%3D%229%22%20fill%3D%22%23F3ECFA%22/%3E%0A%3Cpath%20d%3D%22M47%2053l8%205-8%205z%22%20fill%3D%22%238B5FA8%22/%3E%0A%3C/svg%3E" />
+<link rel="icon" href="data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%0A%3Crect%20width%3D%22100%22%20height%3D%22100%22%20rx%3D%2222%22%20fill%3D%22%23F3ECFA%22/%3E%0A%3Crect%20x%3D%2220%22%20y%3D%2238%22%20width%3D%2260%22%20height%3D%2238%22%20rx%3D%224%22%20fill%3D%22%238B5FA8%22/%3E%0A%3Crect%20x%3D%2220%22%20y%3D%2226%22%20width%3D%2260%22%20height%3D%2212%22%20rx%3D%223%22%20fill%3D%22%236B4485%22%20transform%3D%22rotate%28-4%2050%2032%29%22/%3E%0A%3Crect%20x%3D%2226%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2030%2032%29%22/%3E%0A%3Crect%20x%3D%2240%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2044%2032%29%22/%3E%0A%3Crect%20x%3D%2254%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2058%2032%29%22/%3E%0A%3Crect%20x%3D%2268%22%20y%3D%2227%22%20width%3D%228%22%20height%3D%2210%22%20fill%3D%22%23F3ECFA%22%20transform%3D%22rotate%28-4%2072%2032%29%22/%3E%0A%3Ccircle%20cx%3D%2250%22%20cy%3D%2258%22%20r%3D%229%22%20fill%3D%22%23F3ECFA%22/%3E%0A%3Cpath%20d%3D%22M47%2053l8%205-8%205z%22%20fill%3D%22%238B5FA8%22/%3E%0A%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=JetBrains+Mono:wght@400;500;700&family=Noto+Sans+JP:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root { --purple:#8B5FA8; --purple-dark:#6B4485; --purple-light:#F3ECFA; --gold:#D4A857; }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
+    background: var(--purple-light);
+    color: #3A2E42;
+    font-family: 'Noto Sans JP', sans-serif;
+  }
+  #app { min-height: 100vh; display: flex; flex-direction: column; position: relative; }
+  .header { padding: 22px 18px 16px; background: #fff; border-bottom: 1px solid #E4D3F0; }
+  .header-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; gap: 8px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark { width: 34px; height: 34px; border-radius: 8px; overflow: hidden; flex-shrink: 0; background: var(--purple); display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .brand-text { font-family: 'Bebas Neue', sans-serif; font-size: 21px; letter-spacing: 1px; color: var(--purple-dark); }
+  .count-label { font-size: 12px; color: #9A82AC; font-weight: 600; }
+  .search-box { position: relative; }
+  .search-box input { width: 100%; background: var(--purple-light); border: 1px solid #E4D3F0; border-radius: 20px; padding: 9px 14px 9px 34px; font-size: 14px; font-family: inherit; color: #3A2E42; }
+  .search-box input:focus { outline: none; border-color: var(--purple); }
+  .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.5; }
+  .backup-row { display: flex; gap: 8px; padding: 12px 18px 0; }
+  .backup-btn { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid #E4D3F0; background: #FBF7FD; color: var(--purple-dark); font-size: 11.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
+  .error-banner { margin: 10px 18px 0; padding: 8px 12px; background: #FBE4E4; border: 1px solid #F0A8A8; color: #B03535; font-size: 12px; border-radius: 8px; }
+  .saved-banner { margin: 10px 18px 0; padding: 8px 12px; background: #E9F7EE; border: 1px solid #B6E3C5; color: #2E7D4F; font-size: 12px; border-radius: 8px; font-weight: 700; }
+  .list { flex: 1; overflow-y: auto; padding: 16px 16px 100px; }
+  .empty-state { text-align: center; color: #3A2E42; padding: 60px 20px; display: flex; flex-direction: column; align-items: center; }
+  .loading-state { text-align: center; color: #9A82AC; padding: 80px 20px; font-size: 13px; }
+  .row-header { display: flex; align-items: center; gap: 8px; margin: 18px 0 8px; }
+  .row-header:first-child { margin-top: 0; }
+  .row-badge { width: 26px; height: 26px; border-radius: 50%; background: var(--purple); color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .row-label { font-size: 12px; color: #9A82AC; font-weight: 700; letter-spacing: 0.05em; }
+  .drama-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .drama-card { cursor: pointer; }
+  .drama-poster { width: 100%; aspect-ratio: 2/3; border-radius: 10px; overflow: hidden; background: #fff; border: 1px solid #E4D3F0; display: flex; align-items: center; justify-content: center; font-size: 26px; color: #C9AEDD; }
+  .drama-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .drama-title { margin-top: 6px; font-size: 12px; text-align: center; line-height: 1.35; color: #3A2E42; word-break: break-word; }
+  .fab { position: fixed; bottom: 24px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--purple); border: none; box-shadow: 0 6px 16px rgba(139,95,168,0.35); display: flex; align-items: center; justify-content: center; cursor: pointer; color: #fff; font-size: 26px; font-weight: 700; z-index: 20; }
+  .list::-webkit-scrollbar { width: 6px; }
+  .list::-webkit-scrollbar-thumb { background: #E4D3F0; border-radius: 3px; }
+  button:active { transform: scale(0.97); }
+  .modal-overlay { position: fixed; inset: 0; background: rgba(58,46,66,0.42); display: flex; align-items: flex-end; justify-content: center; z-index: 50; }
+  .modal { background: #fff; border-top: 1px solid #E4D3F0; border-radius: 16px 16px 0 0; width: 100%; max-width: 480px; padding: 18px 18px 24px; display: flex; flex-direction: column; gap: 4px; max-height: 88vh; overflow-y: auto; }
+  .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .modal-title { font-size: 17px; font-weight: 700; color: #3A2E42; }
+  .close-btn { background: none; border: none; cursor: pointer; padding: 4px; font-size: 14px; color: #9A82AC; }
+  label.field-label { font-size: 11.5px; color: #9A82AC; margin-top: 10px; margin-bottom: 5px; font-weight: 600; display: block; }
+  .field-input { width: 100%; background: var(--purple-light); border: 1px solid #E4D3F0; border-radius: 8px; padding: 10px 12px; color: #3A2E42; font-size: 14px; font-family: inherit; }
+  .field-input:focus { outline: none; border-color: var(--purple) !important; }
+  textarea.field-input { resize: vertical; min-height: 70px; }
+  .hint-text { font-size: 11px; color: #9A82AC; margin-top: 4px; }
+  .photo-input-btn { display: block; width: 100%; text-align: center; padding: 14px 0; border-radius: 8px; border: 1px dashed #E4D3F0; background: var(--purple-light); color: var(--purple-dark); font-size: 13px; font-weight: 600; cursor: pointer; }
+  .photo-preview { margin-top: 10px; }
+  .photo-preview img { width: 140px; max-height: 210px; object-fit: cover; border-radius: 10px; display: block; margin: 0 auto; }
+  .submit-btn { margin-top: 18px; background: var(--purple); color: #fff; border: none; border-radius: 10px; padding: 13px 0; font-size: 15px; font-weight: 700; cursor: pointer; width: 100%; font-family: inherit; }
+  .submit-btn:disabled { opacity: 0.6; }
+  .delete-link-btn { display: block; margin: 12px auto 0; background: none; border: none; color: #C0554E; font-size: 12.5px; text-decoration: underline; cursor: pointer; font-family: inherit; padding: 6px; }
+  .photo-viewer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: flex; align-items: center; justify-content: center; z-index: 60; }
+  .photo-viewer-overlay img { max-width: 92vw; max-height: 85vh; object-fit: contain; border-radius: 4px; }
+  .photo-viewer-close { position: absolute; top: 18px; right: 18px; background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; font-size: 18px; cursor: pointer; }
+</style>
+</head>
+<body>
+<div id="app"></div>
+
+<script>
+"use strict";
+
+// ---------- storage helpers ----------
+async function loadJSON(key, fallback) {
+  try {
+    var raw = localStorage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch (e) {
+    return fallback;
+  }
+}
+async function saveJSON(key, value) {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+    return { ok: true };
+  } catch (e) {
+    return { ok: false, error: (e && (e.message || e.toString())) || "unknown-error" };
+  }
+}
+
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+}
+function escapeHtml(str) {
+  return String(str == null ? "" : str)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+// ---------- 五十音行の判定 ----------
+var GOJUON_ROWS = [
+  { label: "あ", chars: "あいうえおゔ" },
+  { label: "か", chars: "かきくけこがぎぐげご" },
+  { label: "さ", chars: "さしすせそざじずぜぞ" },
+  { label: "た", chars: "たちつてとだぢづでど" },
+  { label: "な", chars: "なにぬねの" },
+  { label: "は", chars: "はひふへほばびぶべぼぱぴぷぺぽ" },
+  { label: "ま", chars: "まみむめも" },
+  { label: "や", chars: "やゆよ" },
+  { label: "ら", chars: "らりるれろ" },
+  { label: "わ", chars: "わをん" }
+];
+function toHiragana(ch) {
+  var code = ch.charCodeAt(0);
+  if (code >= 0x30A1 && code <= 0x30F6) return String.fromCharCode(code - 0x60);
+  return ch;
+}
+function rowLabelFor(yomi) {
+  if (!yomi) return "#";
+  var first = toHiragana(yomi.trim().charAt(0));
+  for (var i = 0; i < GOJUON_ROWS.length; i++) {
+    if (GOJUON_ROWS[i].chars.indexOf(first) !== -1) return GOJUON_ROWS[i].label;
+  }
+  return "#";
+}
+
+// ---------- state ----------
+var state = {
+  dramas: [],
+  loaded: false,
+  searchQuery: "",
+  showForm: false,
+  editingId: null,
+  formTitle: "",
+  formYomi: "",
+  error: null,
+  saving: false,
+  savedFlash: false,
+  viewingPhoto: null
+};
+var pendingPhotoDataUrl = null;
+
+function persistDramas() {
+  return saveJSON("kandora-dramas", state.dramas).then(function (res) {
+    if (!res.ok) showError(res.error);
+    return res.ok;
+  });
+}
+function showError(detail) {
+  state.error = "保存に失敗しました" + (detail ? "（" + detail + "）" : "") + "。もう一度お試しください。";
+  render();
+  setTimeout(function () { state.error = null; render(); }, 6000);
+}
+function flashSaved() {
+  state.savedFlash = true;
+  render();
+  setTimeout(function () { state.savedFlash = false; render(); }, 1400);
+}
+
+async function saveDrama(title, yomi, photo, memo, editingId) {
+  if (editingId) {
+    var existing = state.dramas.find(function (d) { return d.id === editingId; });
+    if (existing) {
+      existing.title = title;
+      existing.yomi = yomi;
+      existing.photo = photo || null;
+      existing.memo = memo;
+    }
+  } else {
+    state.dramas.unshift({ id: uid(), createdAt: Date.now(), title: title, yomi: yomi, photo: photo || null, memo: memo || "" });
+  }
+  state.saving = true;
+  render();
+  var ok = await persistDramas();
+  pendingPhotoDataUrl = null;
+  state.saving = false;
+  state.showForm = false;
+  state.editingId = null;
+  render();
+  if (ok) flashSaved();
+}
+async function deleteDrama(id) {
+  state.dramas = state.dramas.filter(function (d) { return d.id !== id; });
+  render();
+  await persistDramas();
+}
+function resizeImageFile(file, callback) {
+  var reader = new FileReader();
+  reader.onload = function (e) {
+    var img = new Image();
+    img.onload = function () {
+      var maxW = 480;
+      var scale = Math.min(1, maxW / img.width);
+      var canvas = document.createElement("canvas");
+      canvas.width = Math.round(img.width * scale);
+      canvas.height = Math.round(img.height * scale);
+      var ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+      callback(canvas.toDataURL("image/jpeg", 0.72));
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function exportData() {
+  var payload = { exportedAt: new Date().toISOString(), dramas: state.dramas };
+  var blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url;
+  a.download = "kandora-backup-" + new Date().toISOString().slice(0, 10) + ".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+}
+async function importDataFromFile(file) {
+  try {
+    var text = await file.text();
+    var data = JSON.parse(text);
+    var map = {};
+    state.dramas.forEach(function (d) { map[d.id] = d; });
+    (data.dramas || []).forEach(function (d) { map[d.id] = d; });
+    state.dramas = Object.values(map);
+    render();
+    await persistDramas();
+    flashSaved();
+  } catch (e) {
+    state.error = "読み込みに失敗しました。ファイルを確認してください。";
+    render();
+    setTimeout(function () { state.error = null; render(); }, 4000);
+  }
+}
+
+// ---------- filtering / sorting ----------
+function visibleDramas() {
+  var q = state.searchQuery.trim();
+  var list = state.dramas;
+  if (q) {
+    list = list.filter(function (d) {
+      return (d.title && d.title.indexOf(q) !== -1) || (d.yomi && d.yomi.indexOf(q) !== -1);
+    });
+  }
+  return list.slice().sort(function (a, b) {
+    return (a.yomi || a.title || "").localeCompare((b.yomi || b.title || ""), "ja");
+  });
+}
+
+// ---------- rendering ----------
+function renderHeader() {
+  var total = state.dramas.length;
+  return (
+    '<div class="header">' +
+      '<div class="header-top">' +
+        '<div class="brand">' +
+          '<div class="brand-mark">🎬</div>' +
+          '<div class="brand-text">韓ドラコレクション</div>' +
+        '</div>' +
+        (total > 0 ? '<div class="count-label">' + total + '作品</div>' : '') +
+      '</div>' +
+      '<div class="search-box">' +
+        '<span class="search-icon">🔍</span>' +
+        '<input type="text" id="search-input" placeholder="タイトルやよみで検索" value="' + escapeHtml(state.searchQuery) + '" />' +
+      '</div>' +
+    '</div>' +
+    '<div class="backup-row">' +
+      '<button class="backup-btn" data-action="export">📤 バックアップを書き出す</button>' +
+      '<label class="backup-btn" style="display:block;">📥 読み込む' +
+        '<input type="file" accept="application/json" id="import-input" style="display:none;" />' +
+      '</label>' +
+    '</div>'
+  );
+}
+
+function renderList() {
+  var list = visibleDramas();
+  if (state.dramas.length === 0) {
+    return (
+      '<div class="list">' +
+        '<div class="empty-state">' +
+          '<div style="font-size:28px;">🎬</div>' +
+          '<div style="margin-top:10px;font-weight:700;">まだ登録した作品がありません</div>' +
+          '<div style="margin-top:4px;color:#9A82AC;font-size:13px;">下の「+」ボタンから見たドラマを追加しましょう</div>' +
+        '</div>' +
+      '</div>'
+    );
+  }
+  if (list.length === 0) {
+    return '<div class="list"><div class="empty-state"><div style="color:#9A82AC;font-size:13px;">見つかりませんでした</div></div></div>';
+  }
+  var html = '<div class="list">';
+  var lastRow = null;
+  list.forEach(function (d) {
+    var row = rowLabelFor(d.yomi || d.title);
+    if (row !== lastRow) {
+      if (lastRow !== null) html += '</div>';
+      html += '<div class="row-header"><div class="row-badge">' + row + '</div><div class="row-label">' + row + '行</div></div>';
+      html += '<div class="drama-grid">';
+      lastRow = row;
+    }
+    var posterInner = d.photo ? '<img src="' + d.photo + '" alt="" />' : '🎞️';
+    html += (
+      '<div class="drama-card" data-action="edit-drama" data-id="' + d.id + '">' +
+        '<div class="drama-poster">' + posterInner + '</div>' +
+        '<div class="drama-title">' + escapeHtml(d.title) + '</div>' +
+      '</div>'
+    );
+  });
+  html += '</div></div>';
+  return html;
+}
+
+function renderModal() {
+  if (!state.showForm) return "";
+  var editing = state.editingId ? state.dramas.find(function (d) { return d.id === state.editingId; }) : null;
+  var previewHtml = pendingPhotoDataUrl
+    ? '<div class="photo-preview" id="photo-preview"><img src="' + pendingPhotoDataUrl + '" /></div>'
+    : '<div class="photo-preview" id="photo-preview"></div>';
+  return (
+    '<div class="modal-overlay" data-action="close-modal">' +
+      '<form class="modal" id="drama-form" data-stop="1">' +
+        '<div class="modal-header">' +
+          '<div class="modal-title">' + (editing ? "編集する" : "作品を追加") + '</div>' +
+          '<button type="button" class="close-btn" data-action="close-modal">✕</button>' +
+        '</div>' +
+        '<label class="field-label">タイトル</label>' +
+        '<input class="field-input" id="d-title" placeholder="例：愛の不時着" value="' + escapeHtml(state.formTitle) + '" autocomplete="off" />' +
+        '<label class="field-label">よみがな(ひらがな)</label>' +
+        '<input class="field-input" id="d-yomi" placeholder="例：あいのふじちゃく" value="' + escapeHtml(state.formYomi) + '" autocomplete="off" />' +
+        '<div class="hint-text">五十音順に並べるために使います</div>' +
+        '<label class="field-label">ポスター写真(あれば)</label>' +
+        '<label class="photo-input-btn">📷 写真を選ぶ・撮る' +
+          '<input type="file" accept="image/*" id="d-photo" style="display:none;" />' +
+        '</label>' +
+        previewHtml +
+        '<label class="field-label">メモ(あれば)</label>' +
+        '<textarea class="field-input" id="d-memo" placeholder="感想やキャストなど">' + escapeHtml(editing ? editing.memo : "") + '</textarea>' +
+        '<button type="submit" class="submit-btn"' + (state.saving ? ' disabled' : '') + '>' + (state.saving ? '保存中…' : '保存する') + '</button>' +
+        (editing ? '<button type="button" class="delete-link-btn" data-action="delete-drama-in-modal">この作品を削除</button>' : '') +
+      '</form>' +
+    '</div>'
+  );
+}
+
+function renderPhotoViewer() {
+  if (!state.viewingPhoto) return "";
+  return (
+    '<div class="photo-viewer-overlay" data-action="close-viewer">' +
+      '<button class="photo-viewer-close" data-action="close-viewer">✕</button>' +
+      '<img src="' + state.viewingPhoto + '" alt="" />' +
+    '</div>'
+  );
+}
+
+function renderApp() {
+  if (!state.loaded) {
+    return '<div class="header"><div class="header-top"><div class="brand"><div class="brand-mark">🎬</div><div class="brand-text">韓ドラコレクション</div></div></div></div>' +
+      '<div class="loading-state">読み込み中...</div>';
+  }
+  var errorHtml = state.error ? '<div class="error-banner">' + escapeHtml(state.error) + '</div>' : "";
+  var savedHtml = state.savedFlash ? '<div class="saved-banner">✓ 保存しました</div>' : "";
+  return (
+    renderHeader() +
+    errorHtml +
+    savedHtml +
+    renderList() +
+    '<button class="fab" data-action="open-form" aria-label="作品を追加">+</button>' +
+    renderModal() +
+    renderPhotoViewer()
+  );
+}
+
+function render() {
+  document.getElementById("app").innerHTML = renderApp();
+  attachEvents();
+}
+
+function openFormForNew() {
+  state.formTitle = "";
+  state.formYomi = "";
+  state.editingId = null;
+  pendingPhotoDataUrl = null;
+  state.showForm = true;
+  render();
+}
+function openFormForEdit(id) {
+  var d = state.dramas.find(function (x) { return x.id === id; });
+  if (!d) return;
+  state.formTitle = d.title;
+  state.formYomi = d.yomi;
+  state.editingId = id;
+  pendingPhotoDataUrl = d.photo || null;
+  state.showForm = true;
+  render();
+}
+
+function attachEvents() {
+  var app = document.getElementById("app");
+
+  var exportBtn = app.querySelector('[data-action="export"]');
+  if (exportBtn) exportBtn.addEventListener("click", exportData);
+
+  var importInput = app.querySelector("#import-input");
+  if (importInput) {
+    importInput.addEventListener("change", function () {
+      var file = importInput.files && importInput.files[0];
+      if (file) importDataFromFile(file);
+      importInput.value = "";
+    });
+  }
+
+  var searchInput = app.querySelector("#search-input");
+  if (searchInput) {
+    searchInput.addEventListener("input", function () {
+      state.searchQuery = searchInput.value;
+      var list = document.querySelector(".list");
+      if (list) list.outerHTML = renderList();
+      attachListEvents();
+    });
+  }
+
+  attachListEvents();
+
+  function attachListEvents() {
+    app.querySelectorAll('[data-action="edit-drama"]').forEach(function (card) {
+      card.addEventListener("click", function () {
+        openFormForEdit(card.getAttribute("data-id"));
+      });
+    });
+  }
+
+  var fab = app.querySelector('[data-action="open-form"]');
+  if (fab) fab.addEventListener("click", openFormForNew);
+
+  app.querySelectorAll('[data-action="close-modal"]').forEach(function (el) {
+    el.addEventListener("click", function (e) {
+      if (e.target.getAttribute("data-action") === "close-modal") {
+        state.showForm = false;
+        state.editingId = null;
+        render();
+      }
+    });
+  });
+
+  var modalInner = app.querySelector('[data-stop="1"]');
+  if (modalInner) modalInner.addEventListener("click", function (e) { e.stopPropagation(); });
+
+  var photoInput = app.querySelector("#d-photo");
+  if (photoInput) {
+    photoInput.addEventListener("change", function () {
+      var file = photoInput.files && photoInput.files[0];
+      if (!file) return;
+      resizeImageFile(file, function (dataUrl) {
+        pendingPhotoDataUrl = dataUrl;
+        var preview = document.getElementById("photo-preview");
+        if (preview) preview.innerHTML = '<img src="' + dataUrl + '" />';
+      });
+    });
+  }
+
+  var deleteInModalBtn = app.querySelector('[data-action="delete-drama-in-modal"]');
+  if (deleteInModalBtn) {
+    deleteInModalBtn.addEventListener("click", function () {
+      var id = state.editingId;
+      state.showForm = false;
+      state.editingId = null;
+      deleteDrama(id);
+    });
+  }
+
+  app.querySelectorAll('[data-action="close-viewer"]').forEach(function (el) {
+    el.addEventListener("click", function () {
+      state.viewingPhoto = null;
+      render();
+    });
+  });
+
+  var form = document.getElementById("drama-form");
+  if (form) {
+    form.addEventListener("submit", function (e) {
+      e.preventDefault();
+      if (state.saving) return;
+      var title = document.getElementById("d-title").value.trim();
+      var yomi = document.getElementById("d-yomi").value.trim();
+      var memo = document.getElementById("d-memo").value;
+      if (!title) return;
+      saveDrama(title, yomi, pendingPhotoDataUrl, memo, state.editingId);
+    });
+  }
+}
+
+// ---------- init ----------
+render();
+(async function init() {
+  try {
+    state.dramas = await loadJSON("kandora-dramas", []);
+  } catch (e) {
+    state.error = "データの読み込みに失敗しました。";
+  } finally {
+    state.loaded = true;
+    render();
+  }
+})();
+</script>
+</body>
+</html>
