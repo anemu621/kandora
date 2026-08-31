@@ -253,7 +253,7 @@ function visibleDramas() {
   var list = state.dramas;
   if (q) {
     list = list.filter(function (d) {
-      return (d.title && d.title.indexOf(q) !== -1) || (d.yomi && d.yomi.indexOf(q) !== -1);
+      return (d.title && d.title.indexOf(q) !== -1) || (d.yomi && d.yomi.indexOf(q) !== -1) || (d.memo && d.memo.indexOf(q) !== -1);
     });
   }
   return list.slice().sort(function (a, b) {
@@ -275,7 +275,7 @@ function renderHeader() {
       '</div>' +
       '<div class="search-box">' +
         '<span class="search-icon">🔍</span>' +
-        '<input type="text" id="search-input" placeholder="タイトルやよみで検索" value="' + escapeHtml(state.searchQuery) + '" />' +
+        '<input type="text" id="search-input" placeholder="タイトル・よみ・メモ(キャスト等)で検索" value="' + escapeHtml(state.searchQuery) + '" />' +
       '</div>' +
     '</div>' +
     '<div class="backup-row">' +
@@ -343,8 +343,6 @@ function renderModal() {
         '<label class="field-label">よみがな(ひらがな)</label>' +
         '<input class="field-input" id="d-yomi" placeholder="例：あいのふじちゃく" value="' + escapeHtml(state.formYomi) + '" autocomplete="off" />' +
         '<div class="hint-text">五十音順に並べるために使います</div>' +
-        '<label class="field-label">リンク(あれば・写真タップで開きます)</label>' +
-        '<input class="field-input" id="d-url" type="url" placeholder="https://..." value="' + escapeHtml(state.formUrl) + '" autocomplete="off" />' +
         '<label class="field-label">ポスター写真(あれば)</label>' +
         '<label class="photo-input-btn">📷 写真を選ぶ・撮る' +
           '<input type="file" accept="image/*" id="d-photo" style="display:none;" />' +
