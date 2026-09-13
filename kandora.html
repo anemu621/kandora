@@ -157,6 +157,7 @@ showForm: false,
 editingId: null,
 formTitle: "",
 formYomi: "",
+formMemo: "",
 formRating: 0,
 error: null,
 saving: false,
@@ -394,7 +395,7 @@ starPicker +
 '</label>' +
 previewHtml +
 '<label class="field-label">メモ(あれば)</label>' +
-'<textarea class="field-input" id="d-memo" placeholder="感想やキャストなど">' + escapeHtml(editing ? editing.memo : "") + '</textarea>' +
+'<textarea class="field-input" id="d-memo" placeholder="感想やキャストなど">' + escapeHtml(state.formMemo || "") + '</textarea>' +
 '<button type="submit" class="submit-btn"' + (state.saving ? ' disabled' : '') + '>' + (state.saving ? '保存中…' : '保存する') + '</button>' +
 (editing ? '<button type="button" class="delete-link-btn" data-action="delete-drama-in-modal">この作品を削除</button>' : '') +
 '</form>' +
@@ -438,6 +439,7 @@ attachEvents();
 function openFormForNew() {
 state.formTitle = "";
 state.formYomi = "";
+state.formMemo = "";
 state.formRating = 0;
 state.editingId = null;
 pendingPhotoDataUrl = null;
@@ -449,6 +451,7 @@ var d = state.dramas.find(function (x) { return x.id === id; });
 if (!d) return;
 state.formTitle = d.title;
 state.formYomi = d.yomi;
+state.formMemo = d.memo || "";
 state.formRating = d.rating || 0;
 state.editingId = id;
 pendingPhotoDataUrl = d.photo || null;
@@ -535,6 +538,27 @@ render();
 var modalInner = app.querySelector('[data-stop="1"]');
 if (modalInner) modalInner.addEventListener("click", function (e) { e.stopPropagation(); });
 
+var titleInput = app.querySelector("#d-title");
+if (titleInput) {
+titleInput.addEventListener("input", function () {
+state.formTitle = titleInput.value;
+});
+}
+
+var yomiInput = app.querySelector("#d-yomi");
+if (yomiInput) {
+yomiInput.addEventListener("input", function () {
+state.formYomi = yomiInput.value;
+});
+}
+
+var memoInput = app.querySelector("#d-memo");
+if (memoInput) {
+memoInput.addEventListener("input", function () {
+state.formMemo = memoInput.value;
+});
+}
+
 app.querySelectorAll('[data-action="pick-rating"]').forEach(function (btn) {
 btn.addEventListener("click", function () {
 state.formRating = parseInt(btn.getAttribute("data-value"), 10);
@@ -577,9 +601,9 @@ if (form) {
 form.addEventListener("submit", function (e) {
 e.preventDefault();
 if (state.saving) return;
-var title = document.getElementById("d-title").value.trim();
-var yomi = document.getElementById("d-yomi").value.trim();
-var memo = document.getElementById("d-memo").value;
+var title = (state.formTitle || "").trim();
+var yomi = (state.formYomi || "").trim();
+var memo = state.formMemo || "";
 if (!title) return;
 saveDrama(title, yomi, pendingPhotoDataUrl, memo, state.formRating, state.editingId);
 });
