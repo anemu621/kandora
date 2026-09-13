@@ -33,6 +33,10 @@ font-family: 'Noto Sans JP', sans-serif;
 .search-box { position: relative; }
 .search-box input { width: 100%; background: var(--purple-light); border: 1px solid #E4D3F0; border-radius: 20px; padding: 9px 14px 9px 34px; font-size: 14px; font-family: inherit; color: #3A2E42; }
 .search-box input:focus { outline: none; border-color: var(--purple); }
+.rating-filter-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; }
+.rating-filter-label { font-size: 11px; color: #9A82AC; flex-shrink: 0; }
+.rating-filter-btn { background: none; border: none; font-size: 20px; padding: 2px; cursor: pointer; color: #E4D3F0; line-height: 1; }
+.rating-filter-btn.active { color: var(--gold); }
 .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); font-size: 13px; opacity: 0.5; }
 .backup-row { display: flex; gap: 8px; padding: 12px 18px 0; }
 .backup-btn { flex: 1; text-align: center; padding: 8px 4px; border-radius: 8px; border: 1px solid #E4D3F0; background: #FBF7FD; color: var(--purple-dark); font-size: 11.5px; font-weight: 700; cursor: pointer; font-family: inherit; }
@@ -148,6 +152,7 @@ var state = {
 dramas: [],
 loaded: false,
 searchQuery: "",
+filterRating: 0,
 showForm: false,
 editingId: null,
 formTitle: "",
@@ -263,6 +268,9 @@ list = list.filter(function (d) {
 return (d.title && d.title.indexOf(q) !== -1) || (d.yomi && d.yomi.indexOf(q) !== -1) || (d.memo && d.memo.indexOf(q) !== -1);
 });
 }
+if (state.filterRating > 0) {
+list = list.filter(function (d) { return (d.rating || 0) === state.filterRating; });
+}
 return list.slice().sort(function (a, b) {
 return (a.yomi || a.title || "").localeCompare((b.yomi || b.title || ""), "ja");
 });
@@ -273,6 +281,19 @@ var r = rating || 0;
 var s = "";
 for (var i = 0; i < 5; i++) s += i < r ? "★" : "☆";
 return s;
+}
+
+function renderRatingFilterRow() {
+var html = '<div class="rating-filter-row">';
+html += '<span class="rating-filter-label">評価で絞る:</span>';
+for (var i = 1; i <= 5; i++) {
+html += '<button type="button" class="rating-filter-btn' + (state.filterRating >= i ? " active" : "") + '" data-action="pick-filter-rating" data-value="' + i + '">★</button>';
+}
+if (state.filterRating > 0) {
+html += '<button type="button" class="rating-filter-btn" data-action="clear-filter-rating" style="font-size:12px;color:#9A82AC;">✕</button>';
+}
+html += '</div>';
+return html;
 }
 
 // ---------- rendering ----------
@@ -291,6 +312,7 @@ return (
 '<span class="search-icon">🔍</span>' +
 '<input type="text" id="search-input" placeholder="タイトル・よみ・メモ(キャスト等)で検索" value="' + escapeHtml(state.searchQuery) + '" />' +
 '</div>' +
+renderRatingFilterRow() +
 '</div>' +
 '<div class="backup-row">' +
 '<button class="backup-btn" data-action="export">📤 バックアップを書き出す</button>' +
@@ -456,6 +478,21 @@ state.searchQuery = searchInput.value;
 var list = document.querySelector(".list");
 if (list) list.outerHTML = renderList();
 attachListEvents();
+});
+}
+
+app.querySelectorAll('[data-action="pick-filter-rating"]').forEach(function (btn) {
+btn.addEventListener("click", function () {
+var v = parseInt(btn.getAttribute("data-value"), 10);
+state.filterRating = (state.filterRating === v) ? 0 : v;
+render();
+});
+});
+var clearFilterBtn = app.querySelector('[data-action="clear-filter-rating"]');
+if (clearFilterBtn) {
+clearFilterBtn.addEventListener("click", function () {
+state.filterRating = 0;
+render();
 });
 }
 
