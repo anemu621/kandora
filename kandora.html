@@ -90,21 +90,65 @@ textarea.field-input { resize: vertical; min-height: 70px; }
 <script>
 "use strict";
 
-// ---------- storage helpers ----------
+// ---------- storage helpers (IndexedDB, with localStorage fallback/migration) ----------
+var IDB_NAME = "kandora-db";
+var IDB_STORE = "kv";
+function idbOpen() {
+return new Promise(function (resolve, reject) {
+if (!window.indexedDB) { reject(new Error("no-indexeddb")); return; }
+var req = indexedDB.open(IDB_NAME, 1);
+req.onupgradeneeded = function () { req.result.createObjectStore(IDB_STORE); };
+req.onsuccess = function () { resolve(req.result); };
+req.onerror = function () { reject(req.error || new Error("idb-open-failed")); };
+});
+}
 async function loadJSON(key, fallback) {
+try {
+var db = await idbOpen();
+var value = await new Promise(function (resolve, reject) {
+var tx = db.transaction(IDB_STORE, "readonly");
+var req = tx.objectStore(IDB_STORE).get(key);
+req.onsuccess = function () { resolve(req.result); };
+req.onerror = function () { reject(req.error || new Error("idb-get-failed")); };
+});
+if (value !== undefined && value !== null) return value;
+// migrate legacy localStorage data if present
+try {
+var legacy = localStorage.getItem(key);
+if (legacy) {
+var parsed = JSON.parse(legacy);
+await saveJSON(key, parsed);
+localStorage.removeItem(key);
+return parsed;
+}
+} catch (e2) { /* ignore migration errors */ }
+return fallback;
+} catch (e) {
 try {
 var raw = localStorage.getItem(key);
 return raw ? JSON.parse(raw) : fallback;
-} catch (e) {
+} catch (e3) {
 return fallback;
+}
 }
 }
 async function saveJSON(key, value) {
 try {
-localStorage.setItem(key, JSON.stringify(value));
+var db = await idbOpen();
+await new Promise(function (resolve, reject) {
+var tx = db.transaction(IDB_STORE, "readwrite");
+tx.objectStore(IDB_STORE).put(value, key);
+tx.oncomplete = function () { resolve(); };
+tx.onerror = function () { reject(tx.error || new Error("idb-write-failed")); };
+});
 return { ok: true };
 } catch (e) {
-return { ok: false, error: (e && (e.message || e.toString())) || "unknown-error" };
+try {
+localStorage.setItem(key, JSON.stringify(value));
+return { ok: true };
+} catch (e2) {
+return { ok: false, error: (e2 && (e2.message || e2.toString())) || (e && (e.message || e.toString())) || "unknown-error" };
+}
 }
 }
 
@@ -173,9 +217,12 @@ return res.ok;
 });
 }
 function showError(detail) {
-state.error = "保存に失敗しました" + (detail ? "（" + detail + "）" : "") + "。もう一度お試しください。";
+var isQuota = detail && /quota/i.test(detail);
+state.error = isQuota
+? "保存容量がいっぱいで、追加できませんでした。写真付きの作品を削除するか、写真なしで登録してみてください。"
+: "保存に失敗しました" + (detail ? "（" + detail + "）" : "") + "。もう一度お試しください。";
 render();
-setTimeout(function () { state.error = null; render(); }, 6000);
+setTimeout(function () { state.error = null; render(); }, 10000);
 }
 function flashSaved() {
 state.savedFlash = true;
@@ -184,6 +231,7 @@ setTimeout(function () { state.savedFlash = false; render(); }, 1400);
 }
 
 async function saveDrama(title, yomi, photo, memo, rating, editingId) {
+var snapshot = JSON.parse(JSON.stringify(state.dramas));
 if (editingId) {
 var existing = state.dramas.find(function (d) { return d.id === editingId; });
 if (existing) {
@@ -199,17 +247,27 @@ state.dramas.unshift({ id: uid(), createdAt: Date.now(), title: title, yomi: yom
 state.saving = true;
 render();
 var ok = await persistDramas();
+if (!ok) {
+state.dramas = snapshot;
+}
 pendingPhotoDataUrl = null;
 state.saving = false;
+if (ok) {
 state.showForm = false;
 state.editingId = null;
+}
 render();
 if (ok) flashSaved();
 }
 async function deleteDrama(id) {
+var snapshot = JSON.parse(JSON.stringify(state.dramas));
 state.dramas = state.dramas.filter(function (d) { return d.id !== id; });
 render();
-await persistDramas();
+var ok = await persistDramas();
+if (!ok) {
+state.dramas = snapshot;
+render();
+}
 }
 function resizeImageFile(file, callback) {
 var reader = new FileReader();
@@ -243,6 +301,7 @@ document.body.removeChild(a);
 setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
 }
 async function importDataFromFile(file) {
+var snapshot = JSON.parse(JSON.stringify(state.dramas));
 try {
 var text = await file.text();
 var data = JSON.parse(text);
@@ -251,9 +310,15 @@ state.dramas.forEach(function (d) { map[d.id] = d; });
 (data.dramas || []).forEach(function (d) { map[d.id] = d; });
 state.dramas = Object.values(map);
 render();
-await persistDramas();
+var ok = await persistDramas();
+if (!ok) {
+state.dramas = snapshot;
+render();
+} else {
 flashSaved();
+}
 } catch (e) {
+state.dramas = snapshot;
 state.error = "読み込みに失敗しました。ファイルを確認してください。";
 render();
 setTimeout(function () { state.error = null; render(); }, 4000);
